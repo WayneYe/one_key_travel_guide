@@ -1,9 +1,15 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  p here it is
-  footer Copyright &copy; 2012 LTW
-
-bogon:one_key_travel_guide twer$ curl -X POST -IL -F "word=%E5%A1%9E%E7%8F%AD%E5%B2%9B" http://www.mafengwo.cn/group/searchresult.php
+    h1= title
+    form(action="#", method="post")
+        input(type="text", placeholder="请输入查询请求")
+        input.btn-large(type="submit", value="提交")
+    div.row
+        div.span12
+            button.btn-large 搜索结果
+    div.row
+        div.span4 第一个结果
+        div.span4 第二个结果
+        div.span4 第三个结果
+    footer Copyright &copy; 2012 LTW
