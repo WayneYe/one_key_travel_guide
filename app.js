@@ -4,32 +4,43 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
-  , http = require('http')
-  , searchGuide = require('./search_guide');
+, routes = require('./routes')
+, http = require('http')
+, searchGuide = require('./search_guide');
 
 var app = express();
 
 process.env.PORT = 80;
 app.configure(function(){
-  app.set('port', process.env.PORT);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+    app.set('port', process.env.PORT);
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.favicon());
+    app.use(express.logger('dev'));
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(app.router);
+    app.use(express.static(__dirname + '/public'));
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler());
+    app.use(express.errorHandler());
 });
 
 app.get('/', routes.index);
-searchGuide.searchMafengwo("塞班岛"); 
+//app.get('/', function (req, res){
+//});
+
+app.post('/search/', function(req, res){
+    var word = req.body.word;
+    console.log(word);
+    searchGuide.searchMafengwo(word, function (result) {
+        res.header("Content-Type", "application/json");
+        res.send(result);
+    }); 
+    //res.send('Searched word: ' + req.params.word);
+});
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+    console.log("Express server listening on port " + app.get('port'));
 });
