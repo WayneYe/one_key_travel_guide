@@ -1,1 +1,4 @@
-$('footer').append "<hr /><em>我是Content-Script改的啦！</em>"
+$ ->
+    $('#footer').html "try"
+    $('a').each (index, element)->
+        console.log element
