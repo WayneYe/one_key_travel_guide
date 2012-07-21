@@ -34,10 +34,15 @@ app.get('/', routes.index);
 app.post('/search/', function(req, res){
     var word = req.body.word;
     console.log("Searching with keyword: " + word);
+    res.header("Content-Type", "application/json");
     searchGuide.searchMafengwo(word, function (result) {
         res.header("Content-Type", "application/json");
         res.send(result);
     }); 
+    //searchGuide.searchLvren(word, function (result) {
+        //res.send(result);
+    //}); 
+
 });
 
 http.createServer(app).listen(app.get('port'), function(){
