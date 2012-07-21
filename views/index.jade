@@ -7,16 +7,19 @@ block content
     #searching.row
         .span6.offset3
             form#search-form.well.form-search.center(action="#", method="post")
-                input#input.input-medium.search-query(name="word", type="text", placeholder="请输入查询请求")
+                input#input.input-medium.search-query(name="word", required="true", type="text", placeholder="请输入查询请求")
                 input#submit.btn.btn-primary(type="submit", value="提交")
         #search-result.span1
     #download.row
         .span6.offset3.center
             button.btn.btn-success.btn-large 一键下载所有
     #result-headers.row
-        #first.span4.center 穷游网
-        #second.span4.center 豆瓣网
-        #third.span4.center 其他网
+        #first.span4.center
+            span.label.label-info 穷游网
+        #second.span4.center
+            span.label.label-info 豆瓣网
+        #third.span4.center
+            span.label.label-info 其他网
     #results.row
         .first.span4.center 第一个结果
         .second.span4.center 第二个结果
