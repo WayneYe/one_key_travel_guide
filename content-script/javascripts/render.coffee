@@ -1,1 +1,1 @@
-$('footer').html "我是Content-Script改的"
+$('footer').append "<hr /><em>我是Content-Script改的啦！</em>"
