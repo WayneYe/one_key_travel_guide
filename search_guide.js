@@ -72,6 +72,7 @@ exports.searchLvren = function(word, searchCallback) {
             url: "http://so.lvren.cn/scenic/%E4%B8%BD%E6%B1%9F/"
         } , function(err, res, body) {
             console.log(res.headers);
+            console.log(body);
             console.log("Got Lvren second page: " + res.headers.location);
             //console.log(r.headers.location);
         });
