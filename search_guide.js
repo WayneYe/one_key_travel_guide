@@ -9,11 +9,11 @@ var navigateUrl = function(url, callback){
         url: url 
     } , function(err, r, body) {
         if (!err && r.statusCode == 200) {
-            //console.log(body);
+            console.log(body);
             callback(body);
         }
         else {
-            console.log("ERROR!!!! Response code: ");
+            console.log("ERROR!!!! Response code: "+err);
         }
     });
 };
