@@ -1,13 +1,13 @@
 {
-    "name": "travel",
+    "name": "一键旅行助手",
     "version": "0.0.1",
-    "description": "旅行搜索引用",
+    "description": "一键旅行助手",
     "content_scripts": [
     {
         "matches":["http://travel.jit.su/*", "http://travel.jitsu.com/*"],
         "run_at": "document_end",
-        "js": ["js/render.js"],
-        "css": ["css/style.css"],
+        "js": ["javascripts/jquery-1.7.2.min.js","javascripts/render.js"],
+        "css": ["stylesheets/style.css"],
         "all_frames":false
     }
     ],
