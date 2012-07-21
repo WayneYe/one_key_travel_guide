@@ -1,7 +1,8 @@
 var req = require('request'),
 querystring = require('querystring'),
 jsdom = require('jsdom'),
-fs = require('fs');
+fs = require('fs'),
+jq = fs.readFileSync("./public/javascripts/jquery-1.7.2.min.js").toString();
 
 var navigateUrl = function(url, callback){
     req.get({
@@ -9,7 +10,6 @@ var navigateUrl = function(url, callback){
         url: url 
     } , function(err, r, body) {
         if (!err && r.statusCode == 200) {
-            console.log(body);
             callback(body);
         }
         else {
@@ -18,9 +18,20 @@ var navigateUrl = function(url, callback){
     });
 };
 
-var getGuideDetailsUrl = function (spotHTML, callback) {
-    jsdom.env(spotHTML, [ 'http://code.jquery.com/jquery-1.7.2.min.js' ], function(errors, window) {
-        callback(window.$("div.box.box_book > div.cont > a.btn").attr("href"));
+var loadDOM = function (html, selector, callback) {
+    //console.log(jq);
+    //jsdom.env(html, [ jq ], function(errors, window) {
+        //callback(window.$(selector));
+    //});
+    jsdom.env({
+        html: html,
+        src: [
+            jq
+        ],
+        done: function(errors, window) {
+            var $ = window.$;
+            callback($(selector));
+        }
     });
 };
 
@@ -39,7 +50,8 @@ exports.searchMafengwo = function(word, searchCallback) {
         console.log("Got Mafengwo spot page: " + spotPage);
         navigateUrl(spotPage, function(responseHTML){
             // 2. Get the detail URL
-            getGuideDetailsUrl(responseHTML, function (guideDetailUrl) {
+            loadDOM(responseHTML,"div.box.box_book > div.cont > a.btn", function (anchor) {
+                var guideDetailUrl = anchor.attr("href");
                 console.log(guideDetailUrl);
                 // 3. Visit the detail URL and return data
                 navigateUrl(MAFENGWO_DOMAIN + guideDetailUrl, function (detailHTML) {
@@ -68,15 +80,23 @@ exports.searchLvren = function(word, searchCallback) {
         // 1. Navigate to "travel-scenic-spot"
         var firstJump = LVREN_DOMAIN + searchResponse.headers.location;
         console.log("Got Lvren first page: " + firstJump);
-        req.get({
-            url: "http://so.lvren.cn/scenic/%E4%B8%BD%E6%B1%9F/"
-        } , function(err, res, body) {
-            console.log(res.headers);
-            console.log(body);
-            console.log("Got Lvren second page: " + res.headers.location);
-            //console.log(r.headers.location);
+        navigateUrl(firstJump, function(firstResHTML){
+            loadDOM(firstResHTML, "div.tc-nav-list-d > ul > li:eq(1) > a", function(anchor) {
+                var secondJump = anchor.attr("href");
+                console.log("Got Lvren second page: " + secondJump);
+                navigateUrl("http://d.lvren.cn" + secondJump, function(secondResHTML){
+                    loadDOM(secondResHTML, "a.download", function (downloadLink){
+                            var resultData = {
+                                PdfLink: downloadLink.attr("href"),
+                                PdfIcon: "",
+                                ImgList: []
+                            };
+                            console.log(resultData);
+                            searchCallback(resultData);
+                        });
+                    });
+            });
         });
-            
     });
 };
 //exports.searchCtrip = function(word, searchCallback){
