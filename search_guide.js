@@ -1,7 +1,8 @@
-var req= require('request'),
+var req = require('request'),
 querystring = require('querystring'),
 jsdom = require('jsdom'),
-fs = require('fs');
+fs = require('fs'),
+querystring = require('querystring');
 
 var navigateUrl = function(url, callback){
     req.get({
@@ -51,7 +52,6 @@ exports.searchMafengwo = function(word, searchCallBack) {
                     var resultData = {
                         ImgList: JSON.parse(imgList)
                     };
-                    console.log(resultData);
                     searchCallBack(resultData);
                 });
             });
