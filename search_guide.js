@@ -60,6 +60,7 @@ exports.searchMafengwo = function(word, searchCallback) {
                         PdfLink: "",
                         ImgList: JSON.parse(imgList)
                     };
+                    console.log("Finished searching Mafengwo.");
                     searchCallback(resultData);
                 });
             });
@@ -91,7 +92,7 @@ exports.searchLvren = function(word, searchCallback) {
                                 PdfIcon: "",
                                 ImgList: []
                             };
-                            console.log(resultData);
+                            console.log("Finished searching Lvren.");
                             searchCallback(resultData);
                         });
                     });

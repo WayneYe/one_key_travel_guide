@@ -32,17 +32,24 @@ app.get('/', routes.index);
 //});
 
 app.post('/search/', function(req, res){
-    var word = req.body.word;
+    var word = req.body.word, taskCounter = 0, responseData = [];
     console.log("Searching with keyword: " + word);
     res.header("Content-Type", "application/json");
     searchGuide.searchMafengwo(word, function (result) {
-        res.header("Content-Type", "application/json");
-        res.send(result);
+        responseData.push(result); 
+        taskCounter++;
     }); 
-    //searchGuide.searchLvren(word, function (result) {
-        //res.send(result);
-    //}); 
+    searchGuide.searchLvren(word, function (result) {
+        responseData.push(result); 
+        taskCounter++;
+    }); 
 
+    var handle = setInterval(function(){
+        if(taskCounter == 2) {
+            res.send(responseData);
+            clearInterval(handle);
+        }
+    }, 100);
 });
 
 http.createServer(app).listen(app.get('port'), function(){
