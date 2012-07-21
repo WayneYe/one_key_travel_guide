@@ -33,12 +33,11 @@ app.get('/', routes.index);
 
 app.post('/search/', function(req, res){
     var word = req.body.word;
-    console.log(word);
+    console.log("Searching with keyword: " + word);
     searchGuide.searchMafengwo(word, function (result) {
         res.header("Content-Type", "application/json");
         res.send(result);
     }); 
-    //res.send('Searched word: ' + req.params.word);
 });
 
 http.createServer(app).listen(app.get('port'), function(){
