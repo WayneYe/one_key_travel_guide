@@ -1,0 +1,19 @@
+{
+    "name": "travel",
+    "version": "0.0.1",
+    "description": "旅行搜索引用",
+    "content_scripts": [
+    {
+        "matches":["http://travel.jit.su/*", "http://travel.jitsu.com/*"],
+        "run_at": "document_end",
+        "js": ["js/render.js"],
+        "css": ["css/style.css"],
+        "all_frames":false
+    }
+    ],
+    "app": {
+        "launch": {
+            "web_url": "http://travel.jit.su/"
+        }
+    }
+}
