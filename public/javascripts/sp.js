@@ -6,14 +6,20 @@
       _this = this;
     evtSrc = new EventSource("io");
     synthesizeLink = function(url, index) {
-      var fileName, href, link, linkText;
+      var fileName, href, img, link, linkText;
       linkText = "攻略" + (index + 1);
-      fileName = linkText + url.split('.').pop();
+      fileName = linkText + "." + url.split('.').pop();
       href = ("" + url) + ("#name=" + linkText) + '&content-type=image/jpeg' + '&filepath=/sdcard/travel/';
-      link = $("<a>" + linkText + "</a>");
+      img = $("<img>");
+      img.attr('src', url);
+      img.attr('width', 260);
+      link = $("<a>");
       link.attr('href', href);
+      link.attr('title', "下载" + linkText);
       link.attr('download', fileName);
       link.attr('name', url);
+      img.appendTo(link);
+      $(link).tooltip();
       return link;
     };
     cleanPosts = function(soup) {
@@ -21,23 +27,33 @@
       posts = $("li", soup);
       cleaned = [];
       _.each(posts, function(e, i, l) {
-        return cleaned.push($(e).find(".pic img"));
+        var href, img, link;
+        img = $(e).find(".pic img");
+        console.log(img);
+        link = $('<a>');
+        href = img.attr("src") + "#name=ddd" + '&content-type=image/jpeg' + '&filepath=/sdcard/travel/';
+        console.log(href);
+        link.attr('href', href);
+        link.attr('title', "下载");
+        link.append(img);
+        return cleaned.push(link);
       });
       return cleaned;
     };
     onMessage = function(e) {
       var cleaned, data,
         _this = this;
-      $('#loading').fadeOut();
       data = JSON.parse(e.data);
       if (data) {
+        $('#loading').fadeOut();
+        $('#result-list').fadeIn();
         _.each(data.ImgList, function(element, index, list) {
-          $('#result-list').append(synthesizeLink(element, index));
+          synthesizeLink(element, index).hide().appendTo($('#result-list')).fadeIn();
           return _this;
         });
         cleaned = cleanPosts(data.Posts);
         return _.each(cleaned, function(element, index, list) {
-          $('#result-list').append(element);
+          element.hide().appendTo($('#img-list')).fadeIn();
           return _this;
         });
       }

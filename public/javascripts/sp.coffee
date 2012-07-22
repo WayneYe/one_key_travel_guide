@@ -3,31 +3,46 @@ $ ->
 
     synthesizeLink = (url, index) =>
         linkText = "攻略#{index+1}"
-        fileName = linkText+url.split('.').pop()
+        fileName = linkText+"."+url.split('.').pop()
         href = "#{url}"+"#name=#{linkText}"+'&content-type=image/jpeg'+'&filepath=/sdcard/travel/'
-        link = $ "<a>#{linkText}</a>"
+        img = $ "<img>"
+        img.attr 'src', url
+        img.attr 'width', 260
+        link = $ "<a>"
         link.attr 'href', href
+        link.attr 'title', "下载"+linkText
         link.attr 'download', fileName
         link.attr 'name', url
+        img.appendTo(link)
+        $(link).tooltip()
         link
 
     cleanPosts = (soup) =>
         posts = $("li", soup)
         cleaned = []
         _.each posts, (e, i, l) =>
-            cleaned.push $(e).find(".pic img")
+            img = $(e).find(".pic img")
+            console.log img
+            link = $ '<a>'
+            href = img.attr("src") + "#name=ddd"+'&content-type=image/jpeg'+'&filepath=/sdcard/travel/'
+            console.log href
+            link.attr 'href', href
+            link.attr 'title', "下载"
+            link.append img
+            cleaned.push link
         cleaned
 
     onMessage = (e) ->
-        $('#loading').fadeOut()
         data = JSON.parse e.data
         if data
+            $('#loading').fadeOut()
+            $('#result-list').fadeIn()
             _.each data.ImgList, (element, index, list) =>
-                $('#result-list').append synthesizeLink(element, index)
+                synthesizeLink(element, index).hide().appendTo($('#result-list')).fadeIn()
                 @
             cleaned = cleanPosts data.Posts
             _.each cleaned, (element, index, list) =>
-                $('#result-list').append element
+                element.hide().appendTo($('#img-list')).fadeIn()
                 @
 
     onOpen = (e) ->
