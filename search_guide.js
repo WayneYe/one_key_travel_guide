@@ -1,8 +1,6 @@
 var req = require('request'),
 querystring = require('querystring'),
-jsdom = require('jsdom'),
-fs = require('fs'),
-jq = fs.readFileSync("./public/javascripts/jquery-1.7.2.min.js").toString();
+cheerio = require('cheerio');
 
 var navigateUrl = function(url, callback){
     req.get({
@@ -19,20 +17,8 @@ var navigateUrl = function(url, callback){
 };
 
 var loadDOM = function (html, selector, callback) {
-    //console.log(jq);
-    //jsdom.env(html, [ jq ], function(errors, window) {
-        //callback(window.$(selector));
-    //});
-    jsdom.env({
-        html: html,
-        src: [
-            jq
-        ],
-        done: function(errors, window) {
-            var $ = window.$;
-            callback($(selector));
-        }
-    });
+    $ = cheerio.load(html);
+    return callback($(selector));
 };
 
 exports.searchMafengwo = function(word, searchCallback) {
