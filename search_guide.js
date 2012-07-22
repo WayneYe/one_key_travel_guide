@@ -80,11 +80,6 @@ exports.searchMafengwo = function(word, res, searchCallback) {
 
 exports.searchLvren = function(word, searchCallback) {
     searchCallback({});
-    setTimeout(function(){
-        routes.pushSSE(JSON.stringify({"AAA": "BBB"}));
-    },3000);
-
-    return;
 
     var LVREN_DOMAIN = "http://so.lvren.cn";
     var postData = querystring.stringify({

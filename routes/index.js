@@ -23,7 +23,6 @@ exports.io = function(req, res){
         'Cache-Control': 'no-cache',
         'Connection': 'keep-alive'
     });
-    res.write('data: hellow\n\n');
 
     var pushSSE = function(data) {
         console.log("PUSH SSE!");

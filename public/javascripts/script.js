@@ -24,32 +24,8 @@
           return $('#message').html('<span class="alert center alert-info">查询中……</span>').fadeIn();
         },
         success: function(data, textStatus, jqXHR) {
-          var synthesizeLink;
           $('#message').fadeOut();
-          $('#result-list').empty();
-          synthesizeLink = function(url, index) {
-            var fileName, href, link, linkText;
-            linkText = "" + searchWord + "攻略" + index;
-            fileName = linkText + url.split('.').pop();
-            href = ("" + url) + ("#name=" + linkText) + '&content-type=image/jpeg' + '&filepath=/sdcard/travel/';
-            link = $("<a>" + linkText + "</a>");
-            link.attr('href', href);
-            link.attr('download', fileName);
-            link.attr('name', url);
-            return link;
-          };
-          _.each(data, function(source, sourceIndex, sourcelist) {
-            _.each(source.ImgList, function(element, index, list) {
-              $('#result-list').append(synthesizeLink(element, index));
-              return _this;
-            });
-            _.each(source.PdfLink, function(element, index, list) {
-              $('#result-list').append(synthesizeLink(element, index));
-              return _this;
-            });
-            return $('div').addClass('row').html(source.Posts).appendTo($('#result-list'));
-          });
-          $('#result-list a').wrap('<li></li>');
+          $('#loading').html('<div class="progress span4 offset4 progress-striped active"><div class="bar" style="width: 40%;"></div></div>').fadeIn();
           return $('#results').slideDown();
         },
         error: function(jqXHR, textStatus, errorThrown) {
