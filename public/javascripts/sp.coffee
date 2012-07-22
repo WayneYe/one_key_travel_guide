@@ -24,7 +24,8 @@ $ ->
             img = $(e).find(".pic img")
             console.log img
             link = $ '<a>'
-            href = img.attr("src") + "#name=ddd"+'&content-type=image/jpeg'+'&filepath=/sdcard/travel/'
+            src = img.attr("src")
+            href = src + "#name=#{src}"+'&content-type=image/jpeg'+'&filepath=/sdcard/travel/'
             console.log href
             link.attr 'href', href
             link.attr 'title', "下载"

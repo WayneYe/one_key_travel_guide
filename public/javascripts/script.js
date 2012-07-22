@@ -8,7 +8,7 @@
         return $(this).click();
       });
     });
-    return $('#search-form').submit(function(e) {
+    $('#search-form').submit(function(e) {
       var searchWord,
         _this = this;
       e.preventDefault();
@@ -32,6 +32,10 @@
         }
       });
       return false;
+    });
+    return $('div.sample-travel-targets > span').click(function(e) {
+      $("#input").val($(this).text());
+      return $("#search-form").submit();
     });
   });
 
