@@ -22,6 +22,27 @@ var loadDOM = function(html, selector, callback) {
         return callback($(selector));
     };
 
+exports.searchBaidu = function (word, searchCallback) {
+    var BAIDU_URL = "http://lvyou.baidu.com";
+    var postData = querystring.stringify({
+        word: word,
+        form: 1,
+    });
+    console.log("Searching baidu with postData:" + postData);
+    req.post({
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': 'Wandoujia-labs'
+        },
+        url: "http://lvyou.baidu.com/search",
+        body: postData
+    }, function(e, response, body) {
+        console.log("Baidu Location: "+response.headers.location);
+        console.log("Baidu body: "+body);
+        return "dummy";
+    });
+}
+
 exports.searchMafengwo = function(word, searchCallback) {
     var MAFENGWO_DOMAIN = "http://www.mafengwo.cn";
     var postData = querystring.stringify({

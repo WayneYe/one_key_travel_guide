@@ -2,6 +2,12 @@
 (function() {
 
   $(function() {
+    $('#downloadAll').click(function() {
+      console.log("downloadAll!");
+      return $('#result-list a').each(function() {
+        return $(this).click();
+      });
+    });
     return $('#search-form').submit(function(e) {
       var searchWord,
         _this = this;
@@ -18,24 +24,30 @@
           return $('#message').html('<span class="alert center alert-info">查询中……</span>').fadeIn();
         },
         success: function(data, textStatus, jqXHR) {
-          var zipLink;
+          var synthesizeLink;
           $('#message').fadeOut();
           $('#result-list').empty();
-          $.each(data[0].ImgList, function(index, value) {
+          synthesizeLink = function(url, index) {
             var fileName, href, link, linkText;
-            linkText = "穷游" + searchWord + "攻略" + index;
-            fileName = linkText + value.split('.').pop();
+            linkText = "" + searchWord + "攻略" + index;
+            fileName = linkText + url.split('.').pop();
+            href = ("" + url) + ("#name=" + linkText) + '&content-type=image/jpeg' + '&filepath=/sdcard/travel/';
             link = $("<a>" + linkText + "</a>");
-            href = ("" + value) + ("#name=" + linkText) + '&content-type=image/jpeg' + '&filepath=/sdcard/travel/';
             link.attr('href', href);
             link.attr('download', fileName);
-            link.attr('id', index);
-            link.attr('name', value);
-            return $('#result-list').append(link);
+            link.attr('name', url);
+            return link;
+          };
+          _.each(data, function(source, sourceIndex, sourcelist) {
+            _.each(source.ImgList, function(element, index, list) {
+              $('#result-list').append(synthesizeLink(element, index));
+              return _this;
+            });
+            return _.each(source.PdfLink, function(element, index, list) {
+              $('#result-list').append(synthesizeLink(element, index));
+              return _this;
+            });
           });
-          zipLink = $("<a>旅人" + searchWord + "攻略</a>");
-          zipLink.attr('href', data[1].PdfLink);
-          $('#result-list').append(zipLink);
           $('#result-list a').wrap('<li></li>');
           return $('#results').slideDown();
         },
