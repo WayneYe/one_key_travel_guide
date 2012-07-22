@@ -32,6 +32,8 @@ var loadDOM = function(html, selectors, callback) {
 
 
 exports.searchMafengwo = function(word, res, searchCallback) {
+    searchCallback({});
+
     var MAFENGWO_DOMAIN = "http://www.mafengwo.cn";
     var postData = querystring.stringify({
         word: word,
@@ -71,7 +73,8 @@ exports.searchMafengwo = function(word, res, searchCallback) {
                     };
                     console.log("Finished searching Mafengwo, result: ");
                     console.log(resultData);
-                    searchCallback(resultData);
+                    //searchCallback(resultData);
+                    routes.pushSSE(JSON.stringify(resultData));
                 });
             });
         });
