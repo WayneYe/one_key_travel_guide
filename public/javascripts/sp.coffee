@@ -2,7 +2,7 @@ $ ->
     evtSrc = new EventSource("io")
 
     synthesizeLink = (url, index) =>
-        linkText = "攻略#{index}"
+        linkText = "攻略#{index+1}"
         fileName = linkText+url.split('.').pop()
         href = "#{url}"+"#name=#{linkText}"+'&content-type=image/jpeg'+'&filepath=/sdcard/travel/'
         link = $ "<a>#{linkText}</a>"
@@ -12,18 +12,20 @@ $ ->
         link
 
     onMessage = (e) ->
-        console.log e.data
         $('#loading').fadeOut()
-        if e.data.ImgList?
-            _.each e.data.ImgList, (element, index, list) =>
+        data = JSON.parse e.data
+        if data
+            console.log data.ImgList
+            _.each data.ImgList, (element, index, list) =>
                 $('#result-list').append synthesizeLink(element, index)
                 @
-            _.each e.data.PdfLink, (element, index, list) =>
-                $('#result-list').append synthesizeLink(element, index)
-                @
-            $('div').addClass('row').html(e.data.Posts).appendTo $('#result-list')
+            #_.each e.data.PdfLink, (element, index, list) =>
+            #    $('#result-list').append synthesizeLink(element, index)
+            #    @
+            $('<div>').addClass('row').html($(data.Posts)).appendTo $('#result-list')
 
     onOpen = (e) ->
+        console.log 'opened'
         @
 
     onError = (e) ->

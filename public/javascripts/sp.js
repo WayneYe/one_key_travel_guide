@@ -7,7 +7,7 @@
     evtSrc = new EventSource("io");
     synthesizeLink = function(url, index) {
       var fileName, href, link, linkText;
-      linkText = "攻略" + index;
+      linkText = "攻略" + (index + 1);
       fileName = linkText + url.split('.').pop();
       href = ("" + url) + ("#name=" + linkText) + '&content-type=image/jpeg' + '&filepath=/sdcard/travel/';
       link = $("<a>" + linkText + "</a>");
@@ -17,22 +17,21 @@
       return link;
     };
     onMessage = function(e) {
-      var _this = this;
-      console.log(e.data);
+      var data,
+        _this = this;
       $('#loading').fadeOut();
-      if (e.data.ImgList != null) {
-        _.each(e.data.ImgList, function(element, index, list) {
+      data = JSON.parse(e.data);
+      if (data) {
+        console.log(data.ImgList);
+        _.each(data.ImgList, function(element, index, list) {
           $('#result-list').append(synthesizeLink(element, index));
           return _this;
         });
-        _.each(e.data.PdfLink, function(element, index, list) {
-          $('#result-list').append(synthesizeLink(element, index));
-          return _this;
-        });
-        return $('div').addClass('row').html(e.data.Posts).appendTo($('#result-list'));
+        return $('<div>').addClass('row').html($(data.Posts)).appendTo($('#result-list'));
       }
     };
     onOpen = function(e) {
+      console.log('opened');
       return this;
     };
     onError = function(e) {
