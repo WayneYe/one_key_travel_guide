@@ -3,30 +3,44 @@
 
   $(function() {
     return $('#search-form').submit(function(e) {
+      var searchWord,
+        _this = this;
       e.preventDefault();
+      searchWord = $('#input').val();
       $.ajax({
         data: {
-          "word": $('#input').val()
+          "word": searchWord
         },
         type: 'POST',
         url: "/search/",
         beforeSend: function(jqXHR, settings) {
-          return $('#message').html('<span class="alert alert-info">查询中……</span>').slideDown();
+          $('#results').slideUp();
+          return $('#message').html('<span class="alert center alert-info">查询中……</span>').fadeIn();
         },
         success: function(data, textStatus, jqXHR) {
-          $('#message').slideUp();
+          var zipLink;
+          $('#message').fadeOut();
           $('#result-list').empty();
-          $('#results').slideDown();
-          return $.each(data.ImgList, function(index, value) {
-            var link;
-            link = $("<a>" + value + "</a>");
-            link.attr('href', ("" + value)(+'#name=tupian' + '&download=tupian.jpeg' + '&content-type=image/jpeg' + '&filename=tupian2.jpeg'));
-            link.attr('id', "" + index);
+          $.each(data[0].ImgList, function(index, value) {
+            var fileName, href, link, linkText;
+            linkText = "穷游" + searchWord + "攻略" + index;
+            fileName = linkText + value.split('.').pop();
+            link = $("<a>" + linkText + "</a>");
+            href = ("" + value) + ("#name=" + linkText) + '&content-type=image/jpeg' + '&filepath=/sdcard/travel/';
+            link.attr('href', href);
+            link.attr('download', fileName);
+            link.attr('id', index);
+            link.attr('name', value);
             return $('#result-list').append(link);
           });
+          zipLink = $("<a>旅人" + searchWord + "攻略</a>");
+          zipLink.attr('href', data[1].PdfLink);
+          $('#result-list').append(zipLink);
+          $('#result-list a').wrap('<li></li>');
+          return $('#results').slideDown();
         },
         error: function(jqXHR, textStatus, errorThrown) {
-          return $('#message').html('<span class="alert alert-info">查询失败</span>');
+          return $('#message').html('<span class="alert center alert-info">查询失败</span>');
         }
       });
       return false;
