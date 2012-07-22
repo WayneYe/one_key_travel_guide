@@ -43,10 +43,11 @@
               $('#result-list').append(synthesizeLink(element, index));
               return _this;
             });
-            return _.each(source.PdfLink, function(element, index, list) {
+            _.each(source.PdfLink, function(element, index, list) {
               $('#result-list').append(synthesizeLink(element, index));
               return _this;
             });
+            return $('div').addClass('row').html(source.Posts).appendTo($('#result-list'));
           });
           $('#result-list a').wrap('<li></li>');
           return $('#results').slideDown();

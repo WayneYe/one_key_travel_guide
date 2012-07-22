@@ -4,7 +4,7 @@
  */
 
 exports.index = function(req, res){
-    res.render('index', { title: '一键旅行助手' });
+    res.render('index', { title: '一站式旅行助手' });
 };
 
 exports.sp = function(req, res){

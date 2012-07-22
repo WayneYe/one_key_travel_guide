@@ -19,8 +19,9 @@ var navigateUrl = function(url, callback) {
     };
 
 var loadDOM = function(html, selectors, callback) {
-        var $ = cheerio.load(html), domResult = [];
-        _(selectors).each(function(selector){
+        var $ = cheerio.load(html),
+            domResult = [];
+        _(selectors).each(function(selector) {
             domResult.push($(selector));
         });
         console.log("domResult...");
@@ -51,17 +52,17 @@ exports.searchMafengwo = function(word, searchCallback) {
         navigateUrl(spotPage, function(responseHTML) {
             // 2. Get the detail URL
             loadDOM(responseHTML, ["div.box.box_book > div.cont > a.btn", "div.post_list"], function(domData) { //li.post_item
-                var guideDetailUrl = domData[0].attr("href"), posts = [];
+                var guideDetailUrl = domData[0].attr("href"),
+                    posts = [];
                 console.log(guideDetailUrl);
                 console.log(domData[1]);
 
                 posts = domData[1].html();
-                
+
                 // 3. Visit the detail URL and return data
                 navigateUrl(MAFENGWO_DOMAIN + guideDetailUrl, function(detailHTML) {
                     var imgList = [];
-                    if (detailHTML.match(/^var\simg_dat=(.*);$/mi).length)
-                        imgList = detailHTML.match(/^var\simg_dat=(.*);$/mi)[1];
+                    if (detailHTML.match(/^var\simg_dat=(.*);$/mi).length) imgList = detailHTML.match(/^var\simg_dat=(.*);$/mi)[1];
                     var resultData = {
                         PdfLink: "",
                         ImgList: JSON.parse(imgList),
@@ -116,24 +117,24 @@ exports.searchLvren = function(word, searchCallback) {
     });
 };
 //exports.searchBaidu = function (word, searchCallback) {
-    //var BAIDU_URL = "http://lvyou.baidu.com";
-    //var searchQuery = querystring.stringify({
-        //word: word,
-        //form: 1,
-    //});
-    //console.log("Searching baidu with search query:" + searchQuery);
-    //navigateUrl("http://lvyou.baidu.com/search??" + searchQuery, function(responseHTML) {
-        //loadDOM(responseHTML, "", function(articles){
-            //console.log(articles);
-            //var resultData = {
-                //PdfLink: "",
-                //ImgList: ""
-            //};
-            //console.log("Finished searching Mafengwo, result: ");
-            //console.log(resultData);
-            //searchCallback(resultData);
-        //});
-    //});
+//var BAIDU_URL = "http://lvyou.baidu.com";
+//var searchQuery = querystring.stringify({
+//word: word,
+//form: 1,
+//});
+//console.log("Searching baidu with search query:" + searchQuery);
+//navigateUrl("http://lvyou.baidu.com/search??" + searchQuery, function(responseHTML) {
+//loadDOM(responseHTML, "", function(articles){
+//console.log(articles);
+//var resultData = {
+//PdfLink: "",
+//ImgList: ""
+//};
+//console.log("Finished searching Mafengwo, result: ");
+//console.log(resultData);
+//searchCallback(resultData);
+//});
+//});
 //}
 //exports.searchCtrip = function(word, searchCallback){
 //var CTRIP_DOMAIN = "http://travel.ctrip.com/CMS/SearchResult.aspx?";

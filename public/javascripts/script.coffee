@@ -35,6 +35,7 @@ $ ->
                     _.each source.PdfLink, (element, index, list) =>
                         $('#result-list').append synthesizeLink(element, index)
                         @
+                    $('div').addClass('row').html(source.Posts).appendTo $('#result-list')
 
                 $('#result-list a').wrap '<li></li>'
                 $('#results').slideDown()
