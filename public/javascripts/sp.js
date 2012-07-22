@@ -50,6 +50,7 @@
         $('#loading').fadeOut();
         $('#message').fadeOut();
         $('#result-list').fadeIn();
+        $('#img-list').fadeIn();
         _.each(data.ImgList, function(element, index, list) {
           synthesizeLink(element, index).hide().appendTo($('#result-list')).fadeIn();
           return _this;

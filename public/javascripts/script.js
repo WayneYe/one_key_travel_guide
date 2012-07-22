@@ -21,6 +21,7 @@
         url: "/search/",
         beforeSend: function(jqXHR, settings) {
           $('#result-list').fadeOut().empty();
+          $('#img-list').fadeOut().empty();
           return $('#message').fadeOut().html('<span class="alert center alert-info">查询中……</span>').fadeIn();
         },
         success: function(data, textStatus, jqXHR) {

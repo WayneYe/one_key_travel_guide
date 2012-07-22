@@ -14,6 +14,7 @@ $ ->
             url: "/search/"
             beforeSend: (jqXHR, settings) ->
                 $('#result-list').fadeOut().empty()
+                $('#img-list').fadeOut().empty()
                 $('#message').fadeOut().html('<span class="alert center alert-info">查询中……</span>').fadeIn()
             success: (data, textStatus, jqXHR) =>
                 $('#loading').html('<div class="progress span4 offset4 progress-striped active"><div class="bar" style="width: 40%;"></div></div>').fadeIn()
