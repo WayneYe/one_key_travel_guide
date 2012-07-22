@@ -24,7 +24,6 @@
           return $('#message').fadeOut().html('<span class="alert center alert-info">查询中……</span>').fadeIn();
         },
         success: function(data, textStatus, jqXHR) {
-          $('#message').fadeOut();
           return $('#loading').html('<div class="progress span4 offset4 progress-striped active"><div class="bar" style="width: 40%;"></div></div>').fadeIn();
         },
         error: function(jqXHR, textStatus, errorThrown) {

@@ -28,6 +28,7 @@ $ ->
             href = src + "#name=#{src}"+'&content-type=image/jpeg'+'&filepath=/sdcard/travel/'
             console.log href
             link.attr 'href', href
+            link.attr 'download', src
             link.attr 'title', "下载"
             link.append img
             cleaned.push link
@@ -37,6 +38,7 @@ $ ->
         data = JSON.parse e.data
         if data
             $('#loading').fadeOut()
+            $('#message').fadeOut()
             $('#result-list').fadeIn()
             _.each data.ImgList, (element, index, list) =>
                 synthesizeLink(element, index).hide().appendTo($('#result-list')).fadeIn()
@@ -45,6 +47,7 @@ $ ->
             _.each cleaned, (element, index, list) =>
                 element.hide().appendTo($('#img-list')).fadeIn()
                 @
+        @
 
     onOpen = (e) ->
         console.log 'opened'

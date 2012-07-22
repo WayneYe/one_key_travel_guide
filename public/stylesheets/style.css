@@ -10,3 +10,14 @@
   left: 50%;
   margin-left: -20px;
 }
+#sample-travel-targets {
+  margin-top: 0.8em;
+  padding: 5px 0;
+}
+#sample-travel-targets span {
+  margin: 0 2px;
+  cursor: pointer;
+}
+footer {
+  margin-top: 10em;
+}

@@ -35,6 +35,7 @@
         href = src + ("#name=" + src) + '&content-type=image/jpeg' + '&filepath=/sdcard/travel/';
         console.log(href);
         link.attr('href', href);
+        link.attr('download', src);
         link.attr('title', "下载");
         link.append(img);
         return cleaned.push(link);
@@ -47,17 +48,19 @@
       data = JSON.parse(e.data);
       if (data) {
         $('#loading').fadeOut();
+        $('#message').fadeOut();
         $('#result-list').fadeIn();
         _.each(data.ImgList, function(element, index, list) {
           synthesizeLink(element, index).hide().appendTo($('#result-list')).fadeIn();
           return _this;
         });
         cleaned = cleanPosts(data.Posts);
-        return _.each(cleaned, function(element, index, list) {
+        _.each(cleaned, function(element, index, list) {
           element.hide().appendTo($('#img-list')).fadeIn();
           return _this;
         });
       }
+      return this;
     };
     onOpen = function(e) {
       console.log('opened');

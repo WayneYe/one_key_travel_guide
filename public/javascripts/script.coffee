@@ -16,7 +16,6 @@ $ ->
                 $('#result-list').fadeOut().empty()
                 $('#message').fadeOut().html('<span class="alert center alert-info">查询中……</span>').fadeIn()
             success: (data, textStatus, jqXHR) =>
-                $('#message').fadeOut()
                 $('#loading').html('<div class="progress span4 offset4 progress-striped active"><div class="bar" style="width: 40%;"></div></div>').fadeIn()
             error: (jqXHR, textStatus, errorThrown)->
                 $('#message').html '<span class="alert center alert-info">查询失败</span>'
