@@ -25,8 +25,6 @@ var loadDOM = function(html, selectors, callback) {
         _(selectors).each(function(selector) {
             domResult.push($(selector));
         });
-        console.log("domResult...");
-        console.log(domResult);
         callback(domResult);
     };
 
