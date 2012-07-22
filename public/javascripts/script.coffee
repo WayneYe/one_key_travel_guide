@@ -21,6 +21,8 @@ $ ->
             error: (jqXHR, textStatus, errorThrown)->
                 $('#message').html '<span class="alert center alert-info">查询失败</span>'
         false
-    $('div.sample-travel-targets > span').click (e)->
+    $('div#sample-travel-targets > span').click (e)->
         $("#input").val $(this).text()
         $("#search-form").submit()
+        false
+    @

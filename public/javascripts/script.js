@@ -33,10 +33,12 @@
       });
       return false;
     });
-    return $('div.sample-travel-targets > span').click(function(e) {
+    $('div#sample-travel-targets > span').click(function(e) {
       $("#input").val($(this).text());
-      return $("#search-form").submit();
+      $("#search-form").submit();
+      return false;
     });
+    return this;
   });
 
 }).call(this);
