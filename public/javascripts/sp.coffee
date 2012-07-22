@@ -11,18 +11,24 @@ $ ->
         link.attr 'name', url
         link
 
+    cleanPosts = (soup) =>
+        posts = $("li", soup)
+        cleaned = []
+        _.each posts, (e, i, l) =>
+            cleaned.push $(e).find(".pic img")
+        cleaned
+
     onMessage = (e) ->
         $('#loading').fadeOut()
         data = JSON.parse e.data
         if data
-            console.log data.ImgList
             _.each data.ImgList, (element, index, list) =>
                 $('#result-list').append synthesizeLink(element, index)
                 @
-            #_.each e.data.PdfLink, (element, index, list) =>
-            #    $('#result-list').append synthesizeLink(element, index)
-            #    @
-            $('<div>').addClass('row').html($(data.Posts)).appendTo $('#result-list')
+            cleaned = cleanPosts data.Posts
+            _.each cleaned, (element, index, list) =>
+                $('#result-list').append element
+                @
 
     onOpen = (e) ->
         console.log 'opened'

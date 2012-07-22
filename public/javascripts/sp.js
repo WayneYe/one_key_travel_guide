@@ -2,7 +2,7 @@
 (function() {
 
   $(function() {
-    var evtSrc, onError, onMessage, onOpen, synthesizeLink,
+    var cleanPosts, evtSrc, onError, onMessage, onOpen, synthesizeLink,
       _this = this;
     evtSrc = new EventSource("io");
     synthesizeLink = function(url, index) {
@@ -16,18 +16,30 @@
       link.attr('name', url);
       return link;
     };
+    cleanPosts = function(soup) {
+      var cleaned, posts;
+      posts = $("li", soup);
+      cleaned = [];
+      _.each(posts, function(e, i, l) {
+        return cleaned.push($(e).find(".pic img"));
+      });
+      return cleaned;
+    };
     onMessage = function(e) {
-      var data,
+      var cleaned, data,
         _this = this;
       $('#loading').fadeOut();
       data = JSON.parse(e.data);
       if (data) {
-        console.log(data.ImgList);
         _.each(data.ImgList, function(element, index, list) {
           $('#result-list').append(synthesizeLink(element, index));
           return _this;
         });
-        return $('<div>').addClass('row').html($(data.Posts)).appendTo($('#result-list'));
+        cleaned = cleanPosts(data.Posts);
+        return _.each(cleaned, function(element, index, list) {
+          $('#result-list').append(element);
+          return _this;
+        });
       }
     };
     onOpen = function(e) {
