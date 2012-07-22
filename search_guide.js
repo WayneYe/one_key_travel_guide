@@ -1,7 +1,8 @@
 var req = require('request'),
     querystring = require('querystring'),
     cheerio = require('cheerio'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    routes = require('./routes');
 
 var navigateUrl = function(url, callback) {
         req.get({
@@ -30,7 +31,7 @@ var loadDOM = function(html, selectors, callback) {
     };
 
 
-exports.searchMafengwo = function(word, searchCallback) {
+exports.searchMafengwo = function(word, res, searchCallback) {
     var MAFENGWO_DOMAIN = "http://www.mafengwo.cn";
     var postData = querystring.stringify({
         word: word,
@@ -78,6 +79,13 @@ exports.searchMafengwo = function(word, searchCallback) {
 };
 
 exports.searchLvren = function(word, searchCallback) {
+    searchCallback({});
+    setTimeout(function(){
+        routes.pushSSE(JSON.stringify({"AAA": "BBB"}));
+    },3000);
+
+    return;
+
     var LVREN_DOMAIN = "http://so.lvren.cn";
     var postData = querystring.stringify({
         k: word,
@@ -109,7 +117,9 @@ exports.searchLvren = function(word, searchCallback) {
                         };
                         console.log("Finished searching Lvren, result: ");
                         console.log(resultData);
-                        searchCallback(resultData);
+                        //searchCallback(resultData);
+
+                        routes.pushSSE(JSON.stringify(resultData));
                     });
                 });
             });

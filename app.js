@@ -35,8 +35,12 @@ app.post('/search/', function(req, res){
     var word = req.body.word, taskCounter = 0, responseData = {};
     console.log("Searching with keyword: " + word);
     res.header("Content-Type", "application/json");
-    searchGuide.searchMafengwo(word, function (result) {
-        responseData["Mafengwo"] = result; 
+    //searchGuide.searchMafengwo(word, res, function (result) {
+        //responseData["Mafengwo"] = result; 
+        //taskCounter++;
+    //}); 
+    searchGuide.searchLvren(word, function (result) {
+        responseData["Lvren"] = result; 
         taskCounter++;
     }); 
     //searchGuide.searchLvren(word, function (result) {
