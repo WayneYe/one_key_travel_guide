@@ -48,13 +48,15 @@ exports.searchMafengwo = function(word, searchCallback) {
                 console.log(guideDetailUrl);
                 // 3. Visit the detail URL and return data
                 navigateUrl(MAFENGWO_DOMAIN + guideDetailUrl, function(detailHTML) {
-                    // 这里有问题，如果是null的时候直接读1不行
-                    var imgList = detailHTML.match(/^var\simg_dat=(.*);$/mi)[1];
+                    var imgList = [];
+                    if (detailHTML.match(/^var\simg_dat=(.*);$/mi).length)
+                        imgList = detailHTML.match(/^var\simg_dat=(.*);$/mi)[1];
                     var resultData = {
                         PdfLink: "",
                         ImgList: JSON.parse(imgList)
                     };
-                    console.log("Finished searching Mafengwo.");
+                    console.log("Finished searching Mafengwo, result: ");
+                    console.log(resultData);
                     searchCallback(resultData);
                 });
             });
@@ -86,12 +88,14 @@ exports.searchLvren = function(word, searchCallback) {
                 console.log("Got Lvren second page: " + secondJump);
                 navigateUrl("http://d.lvren.cn" + secondJump, function(secondResHTML) {
                     loadDOM(secondResHTML, "a.download", function(downloadLink) {
+                        console.log(downloadLink);
                         var resultData = {
                             PdfLink: downloadLink.attr("href"),
                             PdfIcon: "",
                             ImgList: []
                         };
-                        console.log("Finished searching Lvren.");
+                        console.log("Finished searching Lvren, result: ");
+                        console.log(resultData);
                         searchCallback(resultData);
                     });
                 });

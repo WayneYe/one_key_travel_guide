@@ -10,7 +10,7 @@ var express = require('express')
 
 var app = express();
 
-process.env.PORT = 8000;
+process.env.PORT = 80;
 app.configure(function(){
     app.set('port', process.env.PORT);
     app.set('views', __dirname + '/views');
@@ -32,15 +32,15 @@ app.get('/sp', routes.sp);
 app.get('/io', routes.io);
 
 app.post('/search/', function(req, res){
-    var word = req.body.word, taskCounter = 0, responseData = [];
+    var word = req.body.word, taskCounter = 0, responseData = {};
     console.log("Searching with keyword: " + word);
     res.header("Content-Type", "application/json");
     searchGuide.searchMafengwo(word, function (result) {
-        responseData.push(result); 
+        responseData["Mafengwo"] = result; 
         taskCounter++;
     }); 
     searchGuide.searchLvren(word, function (result) {
-        responseData.push(result); 
+        responseData["Lvren"] = result; 
         taskCounter++;
     }); 
 
