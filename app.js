@@ -28,8 +28,8 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
-//app.get('/', function (req, res){
-//});
+app.get('/sp', routes.sp);
+app.get('/io', routes.io);
 
 app.post('/search/', function(req, res){
     var word = req.body.word, taskCounter = 0, responseData = [];
