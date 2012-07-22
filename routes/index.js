@@ -11,6 +11,7 @@ exports.sp = function(req, res){
     res.render('sp', { title: 'HTML5 Server push demo' });
 };
 
+
 exports.io = function(req, res){
     //req.socket.setTimeout(Infinity);
 
@@ -22,13 +23,17 @@ exports.io = function(req, res){
         'Cache-Control': 'no-cache',
         'Connection': 'keep-alive'
     });
-    res.write('data: hellow');
-    res.write('\n');
+    res.write('data: hellow\n\n');
 
+    var pushSSE = function(data) {
+        console.log("PUSH SSE!");
+        res.write("data: " + data + '\n\n');
+    };
+    exports.pushSSE = pushSSE;
 
-    setInterval(function(){
-        console.log("PUSH DATA!");
-        res.write('data: hellow');
-        res.write('\n');
-    },3000);
-}
+    //setInterval(function(){
+        //pushSSE('data: hellow');
+    //},3000);
+
+};
+
