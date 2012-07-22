@@ -45,7 +45,7 @@ app.post('/search/', function(req, res){
     //}); 
 
     var handle = setInterval(function(){
-        if(taskCounter == 3) {
+        if(taskCounter == 1) {
             res.send(responseData);
             clearInterval(handle);
         }

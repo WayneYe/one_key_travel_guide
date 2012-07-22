@@ -50,15 +50,12 @@ exports.searchMafengwo = function(word, searchCallback) {
         console.log("Got Mafengwo spot page: " + spotPage);
         navigateUrl(spotPage, function(responseHTML) {
             // 2. Get the detail URL
-            loadDOM(responseHTML, ["div.box.box_book > div.cont > a.btn", "li.post_item"], function(domData) {
+            loadDOM(responseHTML, ["div.box.box_book > div.cont > a.btn", "div.post_list"], function(domData) { //li.post_item
                 var guideDetailUrl = domData[0].attr("href"), posts = [];
                 console.log(guideDetailUrl);
-                //domData[1].each(function(i, elem) {
-                    //posts.push(elem.html());
-                //});
-                //console.log(domData[1].html());
+                console.log(domData[1]);
+
                 posts = domData[1].html();
-                console.log(posts);
                 
                 // 3. Visit the detail URL and return data
                 navigateUrl(MAFENGWO_DOMAIN + guideDetailUrl, function(detailHTML) {
