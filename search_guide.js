@@ -1,6 +1,7 @@
 var req = require('request'),
     querystring = require('querystring'),
-    cheerio = require('cheerio');
+    cheerio = require('cheerio'),
+    _ = require('underscore');
 
 var navigateUrl = function(url, callback) {
         req.get({
@@ -17,31 +18,16 @@ var navigateUrl = function(url, callback) {
         });
     };
 
-var loadDOM = function(html, selector, callback) {
-        $ = cheerio.load(html);
-        return callback($(selector));
+var loadDOM = function(html, selectors, callback) {
+        var $ = cheerio.load(html), domResult = [];
+        _(selectors).each(function(selector){
+            domResult.push($(selector));
+        });
+        console.log("domResult...");
+        console.log(domResult);
+        callback(domResult);
     };
 
-exports.searchBaidu = function (word, searchCallback) {
-    var BAIDU_URL = "http://lvyou.baidu.com";
-    var postData = querystring.stringify({
-        word: word,
-        form: 1,
-    });
-    console.log("Searching baidu with postData:" + postData);
-    req.post({
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'User-Agent': 'Wandoujia-labs'
-        },
-        url: "http://lvyou.baidu.com/search",
-        body: postData
-    }, function(e, response, body) {
-        console.log("Baidu Location: "+response.headers.location);
-        console.log("Baidu body: "+body);
-        return "dummy";
-    });
-}
 
 exports.searchMafengwo = function(word, searchCallback) {
     var MAFENGWO_DOMAIN = "http://www.mafengwo.cn";
@@ -64,9 +50,16 @@ exports.searchMafengwo = function(word, searchCallback) {
         console.log("Got Mafengwo spot page: " + spotPage);
         navigateUrl(spotPage, function(responseHTML) {
             // 2. Get the detail URL
-            loadDOM(responseHTML, "div.box.box_book > div.cont > a.btn", function(anchor) {
-                var guideDetailUrl = anchor.attr("href");
+            loadDOM(responseHTML, ["div.box.box_book > div.cont > a.btn", "li.post_item"], function(domData) {
+                var guideDetailUrl = domData[0].attr("href"), posts = [];
                 console.log(guideDetailUrl);
+                //domData[1].each(function(i, elem) {
+                    //posts.push(elem.html());
+                //});
+                //console.log(domData[1].html());
+                posts = domData[1].html();
+                console.log(posts);
+                
                 // 3. Visit the detail URL and return data
                 navigateUrl(MAFENGWO_DOMAIN + guideDetailUrl, function(detailHTML) {
                     var imgList = [];
@@ -74,7 +67,8 @@ exports.searchMafengwo = function(word, searchCallback) {
                         imgList = detailHTML.match(/^var\simg_dat=(.*);$/mi)[1];
                     var resultData = {
                         PdfLink: "",
-                        ImgList: JSON.parse(imgList)
+                        ImgList: JSON.parse(imgList),
+                        Posts: posts
                     };
                     console.log("Finished searching Mafengwo, result: ");
                     console.log(resultData);
@@ -104,14 +98,14 @@ exports.searchLvren = function(word, searchCallback) {
         var firstJump = LVREN_DOMAIN + searchResponse.headers.location;
         console.log("Got Lvren first page: " + firstJump);
         navigateUrl(firstJump, function(firstResHTML) {
-            loadDOM(firstResHTML, "div.tc-nav-list-d > ul > li:eq(1) > a", function(anchor) {
-                var secondJump = anchor.attr("href");
+            loadDOM(firstResHTML, ["div.tc-nav-list-d > ul > li:eq(1) > a"], function(anchor) {
+                var secondJump = anchor[0].attr("href");
                 console.log("Got Lvren second page: " + secondJump);
                 navigateUrl("http://d.lvren.cn" + secondJump, function(secondResHTML) {
-                    loadDOM(secondResHTML, "a.download", function(downloadLink) {
-                        console.log(downloadLink);
+                    loadDOM(secondResHTML, ["a.download"], function(downloadLink) {
+                        console.log(downloadLink[0]);
                         var resultData = {
-                            PdfLink: downloadLink.attr("href"),
+                            PdfLink: downloadLink[0].attr("href"),
                             PdfIcon: "",
                             ImgList: []
                         };
@@ -124,6 +118,26 @@ exports.searchLvren = function(word, searchCallback) {
         });
     });
 };
+//exports.searchBaidu = function (word, searchCallback) {
+    //var BAIDU_URL = "http://lvyou.baidu.com";
+    //var searchQuery = querystring.stringify({
+        //word: word,
+        //form: 1,
+    //});
+    //console.log("Searching baidu with search query:" + searchQuery);
+    //navigateUrl("http://lvyou.baidu.com/search??" + searchQuery, function(responseHTML) {
+        //loadDOM(responseHTML, "", function(articles){
+            //console.log(articles);
+            //var resultData = {
+                //PdfLink: "",
+                //ImgList: ""
+            //};
+            //console.log("Finished searching Mafengwo, result: ");
+            //console.log(resultData);
+            //searchCallback(resultData);
+        //});
+    //});
+//}
 //exports.searchCtrip = function(word, searchCallback){
 //var CTRIP_DOMAIN = "http://travel.ctrip.com/CMS/SearchResult.aspx?";
 //var queryStr = querystring.stringify({KeyWords: word});
