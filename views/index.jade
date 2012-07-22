@@ -8,8 +8,10 @@ block content
     #searching.row
         .span6.offset3
             form#search-form.well.form-search.center(action="#", method="post")
-                input#input.input-medium.search-query(name="word", required="true", type="text", placeholder="请输入查询请求")
-                input#submit.btn.btn-primary(type="submit", value="提交")
+                input#input.input-medium.search-query(name="word", required="true", type="text", placeholder="请输入目的地", autofocus="autofocus")
+                input#submit.btn.btn-primary(type="submit", value="搜索")
+                #sample-travel-targets
+                span.badge.badge-info.travel-target(href="#") 丽江
     #results.row.hide
         #loading.hide
         ul#result-list.pager
